@@ -23,13 +23,33 @@ get_prop1(I, C) :-
     read(C),
     instC(I, C).
 
+get_prop2(C1, C2) :-
+    write('Entrez C1 : '), nl,
+    read(C1),
+    write('Entrez C2 : '), nl,
+    read(C2),
+    concept(C1), concept(C2).
+
+
 
 %on suppose que le Tbox est déja traité
 acquisition_prop_type1(Abi, Abi1, Tbox) :-
     get_prop1(I, C),
-    traitement_elem_complex(C, Y),
+    traitement_elem_complex(not(C), Y),
     concatenate(Abi, [(I, Y)], Abi1).
 
+
+generer_random_Iname(RI) :-
+    random(0,100000, RN),
+    atom_concat('i', RN, RIS),
+    term_string(RI, RIS).
+
+
+acquisition_prop_type2(Abi,Abi1,Tbox) :-
+    generer_random_Iname(RI),
+    get_prop2(C1, C2),
+    traitement_elem_complex(not(and(C1, C2)), Y),
+    concatenate(Abi, [(RI,Y), Abi1], Abi1).
 
 
 
