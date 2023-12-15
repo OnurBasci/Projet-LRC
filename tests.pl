@@ -1,3 +1,4 @@
+%PARTIE 1
 
 %TEST TBOX
 traitement_elem_complex_Tbox(not(and(or(sculpteur, editeur), auteur)), X).
@@ -22,10 +23,18 @@ rname(cree_par).
 traitement_AboxI([(personne, sculpteur)], [], L).
 
 
-[(sculpteur,and(personne,some(aCree,sculpture))),(auteur,and(personne,some(aEcrit,livre))),(editeur,and(personne,and(not(some(aEcrit,livre)),some(aEdite,livre)))),(parent,and(personne,some(aEnfant,anything)))]
+%tbox
+% [(sculpteur,and(personne,some(aCree,sculpture))),(auteur,and(personne,some(aEcrit,livre))),(editeur,and(personne,and(not(some(aEcrit,livre)),some(aEdite,livre)))),(parent,and(personne,some(aEnfant,anything)))]
+%
 
 
 %abox
-[(michelAnge,personne), (david,sculpture), (sonnets,livre), (vinci,personne), (joconde,objet)]
+% [(michelAnge,personne), (david,sculpture), (sonnets,livre),
+% (vinci,personne), (joconde,objet)]
 
+
+
+%PARTIE 2
+%prop1
+saisie_et_traitement_prop_a_demontrer([(michelAnge, personne)], Abi1, [])
 

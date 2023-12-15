@@ -15,6 +15,8 @@ concept(all(R, C)) :- rname(R), concept(C).
 concept(some(R, C)) :- rname(R), concept(C).
 
 
+instC(I, C) :- iname(I), concept(C).
+
 
 % Pour la Tbox
 definitionT(CNA, CNA2) :- cnamena(CNA), concept(CNA2).
@@ -149,14 +151,14 @@ forme_atomique(CG, X) :-
 
 % CG concept complex, X resultat sous forme normale négatif avec des
 % élements atomique
-traitement_elem_complex_Tbox(CG, X) :-
+traitement_elem_complex(CG, X) :-
     forme_atomique(CG, Y),
     nnf(Y, X).
 
 traitement_Tbox([], Init, L) :- L = Init.
 traitement_Tbox([(CA, CG) | L], Init, Lfinal) :-
     pas_autoref(CA, CG, []), %check if there is not autoref
-    traitement_elem_complex_Tbox(CG, Y),
+    traitement_elem_complex(CG, Y),
     concatenate(Init, [(CA, Y)], Lc),
     traitement_Tbox(L, Lc, Lfinal).
 
@@ -166,7 +168,7 @@ traitement_Tbox([(CA, CG) | L], Init, Lfinal) :-
 traitement_AboxI([], Init, L) :- L = Init.
 traitement_AboxI([(CA, CG) | L], Init, Lfinal) :-
     pas_autoref(CA, CG, []), %check if there is not autoref
-    traitement_elem_complex_Tbox(CG, Y),
+    traitement_elem_complex(CG, Y),
     concatenate(Init, [(CA, Y)], Lc),
     traitement_AboxI(L, Lc, Lfinal).
 
