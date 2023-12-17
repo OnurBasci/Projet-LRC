@@ -38,3 +38,9 @@ traitement_AboxI([(personne, sculpteur)], [], L).
 %prop1
 saisie_et_traitement_prop_a_demontrer([(michelAnge, personne)], Abi1, [])
 
+
+
+%Partie 3
+get_Lie([(a, some(b)), (a, and(b, c)), (d, some(e))], [], Lie).
+
+tri_Abox([(a, and(b, c)), (a, some(b, c)), (d, or(e, f)), (f, all(h, g)), (i,j)], Lie,Lpt, Li, Lu, Ls).
