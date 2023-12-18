@@ -36,25 +36,9 @@ verif_AboxR([(I1, I2, R) | L]) :-
     verif_AboxR(L).
 verif_AboxR([]).
 
-
-
-/*pas_autoref(C, not(C2)) :-
-    pas_autoref(C, C2).
-
-pas_autoref(C, and(C1, C2)) :-
-    pas_autoref(C, C1), pas_autoref(C, C2).
-
-pas_autoref(C, or(C1, C2)) :-
-    pas_autoref(C, C1), pas_autoref(C, C2).
-
-pas_autoref(C, all(X, C2)) :-
-    pas_autoref(C, C2).
-
-pas_autoref(C, some(Y, C2)) :-
-    pas_autoref(C, C2).
-
-pas_autoref(C, C1) :-
-    cnamea(C1); C \== C1; equiv(C1,Z), pas_autoref(C,Z).*/
+verif_Abox(Abi, Abr) :-
+    verif_AboxI(Abi),
+    verif_AboxR(Abr).
 
 
 
@@ -62,6 +46,11 @@ pas_autoref(C, C1) :-
 % atomique dans une liste et on vérifie si on rencontre 2 fois cet
 % élement. Si c'est le cas alors autoref est vrai.
 % L c'est pour obtenir les élements rencontrés
+
+verif_Autoref([C | L]) :-
+    equiv(C, E),
+    (autoref(C, E, []);
+    verif_Autoref(L)).
 
 autoref(C, not(C2), L) :-
     autoref(C, C2, L).

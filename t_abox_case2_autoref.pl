@@ -41,16 +41,3 @@ instR(michelAnge,david,aCree).
 instR(michelAnge,sonnets,aEcrit).
 instR(vinci,joconde,aCree).
 
-
-
-
-
-
-
-
-
-
-
-
-
-

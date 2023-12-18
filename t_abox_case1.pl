@@ -3,9 +3,9 @@ cnamea(livre).
 cnamea(objet).
 cnamea(anything).
 cnamea(nothing).
+cnamea(sculpture).
 cnamea(anything).
 cnamea(nothing).
-cnamena(sculpture).
 cnamena(auteur).
 cnamena(editeur).
 cnamena(sculpteur).
@@ -22,8 +22,6 @@ rname(aEnfant).
 
 rname(cree_par).
 
-
-equiv(sculpture, and(objet, all(cree_par, sculpteur))).
 equiv(sculpteur,and(personne,some(aCree,sculpture))).
 equiv(auteur,and(personne,some(aEcrit,livre))).
 equiv(editeur,and(personne,and(not(some(aEcrit,livre)),some(aEdite,livre)))).
@@ -40,17 +38,4 @@ inst(joconde,objet).
 instR(michelAnge,david,aCree).
 instR(michelAnge,sonnets,aEcrit).
 instR(vinci,joconde,aCree).
-
-
-
-
-
-
-
-
-
-
-
-
-
 

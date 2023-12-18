@@ -15,6 +15,8 @@ concept(all(R, C)) :- rname(R), concept(C).
 concept(some(R, C)) :- rname(R), concept(C).
 
 
+instC(I, C) :- iname(I), concept(C).
+
 
 % Pour la Tbox
 definitionT(CNA, CNA2) :- cnamena(CNA), concept(CNA2).
@@ -33,6 +35,10 @@ verif_AboxR([(I1, I2, R) | L]) :-
     instR(I1, I2, R),
     verif_AboxR(L).
 verif_AboxR([]).
+
+verif_Abox(Abi, Abr) :-
+    verif_AboxI(Abi),
+    verif_AboxR(Abr).
 
 
 
@@ -60,6 +66,11 @@ pas_autoref(C, C1) :-
 % atomique dans une liste et on vérifie si on rencontre 2 fois cet
 % élement. Si c'est le cas alors autoref est vrai.
 % L c'est pour obtenir les élements rencontrés
+
+verif_Autoref([C | L]) :-
+    equiv(C, E),
+    (autoref(C, E, []);
+    verif_Autoref(L)).
 
 autoref(C, not(C2), L) :-
     autoref(C, C2, L).
