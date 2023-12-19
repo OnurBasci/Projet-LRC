@@ -65,3 +65,7 @@ traitement_Tbox([(michelAnge,personne), (david,sculpture), (sonnets,livre), (vin
 
 
 tri_Abox([(michelAnge,personne), (david,sculpture), (sonnets,livre), (vinci,personne), (joconde,objet)], Lie, Lpt, Li, Lu, Ls).
+
+
+
+[(auteur,and(personne,some(aEcrit,livre))),(editeur,and(personne,and(not(some(aEcrit,livre)),some(aEdite,livre)))),(parent,and(personne,some(aEnfant,anything))),(sculpteur,and(personne,some(aCree,sculpture)))]

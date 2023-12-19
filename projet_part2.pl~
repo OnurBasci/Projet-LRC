@@ -49,7 +49,7 @@ acquisition_prop_type2(Abi,Abi1,Tbox) :-
     generer_random_Iname(RI),
     get_prop2(C1, C2),
     traitement_elem_complex(not(and(C1, C2)), Y),
-    concatenate(Abi, [(RI,Y), Abi1], Abi1).
+    concatenate(Abi, [(RI,Y)], Abi1).
 
 
 

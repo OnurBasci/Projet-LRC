@@ -69,3 +69,6 @@ tri_Abox([(michelAnge,personne), (david,sculpture), (sonnets,livre), (vinci,pers
 
 
 [(auteur,and(personne,some(aEcrit,livre))),(editeur,and(personne,and(not(some(aEcrit,livre)),some(aEdite,livre)))),(parent,and(personne,some(aEnfant,anything))),(sculpteur,and(personne,some(aCree,sculpture)))]
+
+
+

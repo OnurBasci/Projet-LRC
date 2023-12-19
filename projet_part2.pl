@@ -1,6 +1,3 @@
-deuxieme_etape(Abi,Abi1,Tbox) :-
-    saisie_et_traitement_prop_a_demontrer(Abi,Abi1,Tbox).
-
 saisie_et_traitement_prop_a_demontrer(Abi,Abi1,Tbox) :-
     nl,write('Entrez le numero du type de proposition que vous voulez demontrer :'),nl,
     write('1 Une instance donnee appartient a un concept donne.'),nl,

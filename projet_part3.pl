@@ -103,48 +103,34 @@ get_Ls([(I, C) | L], Init, Ls, Lie, Lpt, Li, Lu) :-
 
 
 evolue((I, and(C1, C2)), Lie, Lpt, Li, Lu, Ls, Lie1, Lpt1, Li1, Lu1, Ls1) :-
-    cnamea(C1), cnamea(C2),
-    concatenate(Ls, [(I, C1)], LsC1),
-    concatenate(LsC1, [(I, C2)], Ls1),
-    Lie1 = Lie, Lpt1 = Lpt, Li1 = Li, Lu1 = Lu;
-    get_type(C1, T), get_type(C2, T1),
-    (T == and, T1 == and, %and and
-    concatenate(Li, [(I, C1)], LiC1),
-    concatenate(LiC1, [(I, C2)], Ls1);
-    T == and, T1 == or, %and or
-    concatenate(Li, [(I, C1)], Li1),
-    concatenate(Lu, [(I, C2)], Lu1);
-    T == or, T1 == and, %or and
-    concatenate(Li, [(I, C2)], Li1),
-    concatenate(Lu, [(I, C1)], Lu1);
-    T == or, T1 == or, %and or
-    concatenate(Li, [(I, C1)], Li1),
-    concatenate(Lu, [(I, C2)], Lu1)
-
-    ).
-
-evolue_single((I, C), Lie, Lpt, Li, Lu, Ls, Lie1, Lpt1, Li1, Lu1, Ls1) :-
-    get_type(C, T),
-    (T == and,
-    concatenate(Li, [(I, C1)], Li1));
-    (T == or,
-    concatenate(Li, [(I, C1)], Li1));
-    (T == some,
-    concatenate(Li, [(I, C1)], Li1));
-    (T == all,
-    concatenate(Li, [(I, C1)], Li1));
-    (cnamea(C),
-    concatenate(Li, [(I, C1)], Li1)).
-
-
+    evolue_single((I, C1), Lie, Lpt, Li, Lu, Ls, Liei, Lpti, Lii, Lui, Lsi),
+    evolue_single((I, C2), Liei, Lpti, Lii, Lui, Lsi, Lie1, Lpt1, Li1, Lu1, Ls1).
 
 
 evolue((I, C), Lie, Lpt, Li, Lu, Ls, Lie1, Lpt1, Li1, Lu1, Ls1) :-
-    concatenate(Ls, [(I, C)], Ls1),
-    Lie1 = Lie, Lpt1 = Lpt, Li1 = Li, Lu1 = Lu.
-evolue((I, not(C)), Lie, Lpt, Li, Lu, Ls, Lie1, Lpt1, Li1, Lu1, Ls1) :-
-    concatenate(Ls, [(I, not(C))], Ls1),
-    Lie1 = Lie, Lpt1 = Lpt, Li1 = Li, Lu1 = Lu.
+    evolue_single((I, C), Lie, Lpt, Li, Lu, Ls, Lie1, Lpt1, Li1, Lu1, Ls1).
+
+
+evolue_single((I, C), Lie, Lpt, Li, Lu, Ls, Lie1, Lpt1, Li1, Lu1, Ls1) :-
+    (get_type(C, T), T == and,
+    Lie1 = Lie, Lpt1 = Lpt, Lu1 = Lu, Ls1 = Ls,
+    concatenate(Li, [(I, C)], Li1));
+    (get_type(C, T), T == or,
+    Lie1 = Lie, Lpt1 = Lpt, Li1 = Li, Ls1 = Ls,
+    concatenate(Lu, [(I, C)], Lu1));
+    (get_type(C, T), T == some,
+    Li1 = Li, Lpt1 = Lpt, Lu1 = Lu, Ls1 = Ls,
+    concatenate(Lie, [(I, C)], Lie1));
+    (get_type(C, T), T == all,
+    Lie1 = Lie, Li1 = Li, Lu1 = Lu, Ls1 = Ls,
+    concatenate(Lpt, [(I, C)], Lpt1));
+    (get_type(C, T), T == not,
+    Lie1 = Lie, Li1 = Li, Lu1 = Lu, Lpt1 = Lpt,
+    concatenate(Ls, [(I, C)], Ls1));
+    (cnamea(C),
+    Lie1 = Lie, Lpt1 = Lpt, Lu1 = Lu, Li1 = Li,
+    concatenate(Ls, [(I, C)], Ls1)).
+
 
 
 
@@ -156,20 +142,41 @@ test_clash([(I, C) | L], Li) :-
     test_clash(L, Li).
 
 
+print_current_states(Lie, Lpt, Li, Lu, Ls) :-
+    nl, write('current state'),nl,
+    nl, write('Lie: '), write(Lie),nl,
+    nl, write('Lpt: '), write(Lpt),nl,
+    nl, write('Li: '), write(Li),nl,
+    nl, write('Lu: '), write(Lu),nl,
+    nl, write('Ls: '), write(Ls),nl.
+
+
 
 complete_some([(A, some(R, C)) | L], Lpt, Li, Lu, Ls, Abr) :-
     nl,write('Règle il existe'), nl,
-    generer_random_Iname(B),
+    generer_random_Iname(B), generer_random_Iname(Buffer),
+    nl, write('before some '), write(Buffer),nl,
+    concatenate([(A, some(R, C))], L, Lie),
+    print_current_states(Lie, Lpt, Li, Lu, Ls),
     evolue((B, C), L, Lpt, Li, Lu, Ls, Lie1, Lpt1, Li1, Lu1, Ls1),
     concatenate(Abr, [(A, B, R)], Abr1), %mettre à jour Abr
+    nl, write('after some'), write(Buffer), nl,
+    print_current_states(Lie1, Lpt1, Li1, Lu1, Ls1),
     (test_clash(Ls1, Ls1); %soit il y a un clash et on arête
     resolution(Lie1, Lpt1, Li1, Lu1, Ls1, Abr1) %sinon on continue la résolution
     ).
 
 
+
 transformation_and(Lie, Lpt, [(A, and(C1, C2)) | L], Lu, Ls, Abr) :-
     nl,write('Règle et'), nl,
+    concatenate([(A, and(C1, C2))], L, Li),
+    generer_random_Iname(Buffer),
+    nl, write('before and'), write(Buffer), nl,
+    print_current_states(Lie, Lpt, Li, Lu, Ls),
     evolue((A, and(C1, C2)) , Lie, Lpt, L, Lu, Ls, Lie1, Lpt1, Li1, Lu1, Ls1),
+    nl, write('after and'),  write(Buffer), nl,
+    print_current_states(Lie1, Lpt1, Li1, Lu1, Ls1),
     (test_clash(Ls1, Ls1); %soit il y a un clash et on arête
     resolution(Lie1, Lpt1, Li1, Lu1, Ls1, Abr) %sinon on continue la résolution
     ).
@@ -178,10 +185,12 @@ transformation_and(Lie, Lpt, [(A, and(C1, C2)) | L], Lu, Ls, Abr) :-
 transformation_or(Lie, Lpt, Li, [(A, or(C1, C2)) | L], Ls, Abr) :-
     nl,write('Règle or'), nl,
     (evolue((A, C1) , Lie, Lpt, Li, L, Ls, Lie1, Lpt1, Li1, Lu1, Ls1),
+     print_current_states(Lie1, Lpt1, Li1, Lu1, Ls1),
     (test_clash(Ls1, Ls1); %soit il y a un clash et on arête
     resolution(Lie1, Lpt1, Li1, Lu1, Ls1, Abr) %sinon on continue la résolution
     ),%premier branche
     evolue((A, C2) , Lie, Lpt, Li, L, Ls, Lie2, Lpt2, Li2, Lu2, Ls2),
+    print_current_states(Lie2, Lpt2, Li2, Lu2, Ls2),
     (test_clash(Ls2, Ls2); %soit il y a un clash et on arête
     resolution(Lie2, Lpt2, Li2, Lu2, Ls2, Abr) %sinon on continue la résolution
     )).%second branche
@@ -191,6 +200,7 @@ deduction_all(Lie, [(A, all(R, C)) | L], Li,Lu,Ls,Abr) :-
     nl,write('Règle pour tout'), nl,
     get_a_b_R(A, R, Abr, [], La_b_R), %list contenant les elements de types (a, b) : R
     put_bc_for_all(C, La_b_R, L, Ls1),
+    print_current_states(Lie, L, Li, Lu, Ls1),
     (test_clash(Ls1, Ls1); %soit il y a un clash et on arête
     resolution(Lie, L, Li, Lu, Ls1, br) %sinon on continue la résolution
     ).
@@ -207,7 +217,7 @@ get_a_b_R(A, R,[(A1, B1, R1) | L], Init, Lfinal) :-
 put_bc_for_all(_, [], Ls, L_final) :- L_final = Ls.
 put_bc_for_all(C, [(_, B, _) | L], Ls, Ls_final) :-
     evolue((B, C), L, _, _, _, Ls, _, _, _, _, Ls1),
-    deduction_for_all(C, L, Ls1, Ls_final).
+    put_bc_for_all(C, L, Ls1, Ls_final).
 
 
 
